@@ -13,6 +13,7 @@ class Video(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField(blank=True)
     is_free = models.BooleanField(default=True)
+    file = models.FileField(upload_to='videos/')
     duration_sec = models.PositiveIntegerField(default=0)
     is_active = models.BooleanField(default=True)
     published_at = models.DateTimeField(null=True, blank=True)

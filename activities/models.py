@@ -1,23 +1,17 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 from django.core.validators import MinValueValidator, MaxValueValidator
-from django.utils import timezone
 from videos.models import Video
 
 User = get_user_model()
 
-class WatchHistory(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='watch_histories')
-    video = models.ForeignKey(Video, on_delete=models.CASCADE, related_name='watch_histories')
-
-    started_at = models.DateTimeField(default=timezone.now)
-    finished_at = models.DateTimeField(null=True, blank=True)
-    seconds_watched = models.PositiveIntegerField(default=0)
-
+class ViewLog(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='view_logs')
+    video = models.ForeignKey(Video, on_delete=models.CASCADE, related_name='view_logs')
     created_at = models.DateTimeField(auto_now_add=True)
 
-    def __str__(self):
-        return f'{self.user} watched {self.video}'
+    def __str__(self) -> str:
+        return f'{self.user} viewed {self.video}'
 
 class Rating(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='ratings')

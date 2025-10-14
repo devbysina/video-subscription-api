@@ -18,20 +18,10 @@ class SubscriptionPlan(models.Model):
         return f'{self.name} ({self.period_days}d)'
 
 class Subscription(models.Model):
-    STATUS_CHOICES = (
-        ('active', 'Active'),
-        ('canceled', 'Canceled'),
-        ('expired', 'Expired'),
-        ('pending', 'Pending'),
-    )
-
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='subscriptions')
-    plan = models.ForeignKey(SubscriptionPlan, on_delete=models.PROTECT, related_name='subscriptions')
 
     start_at = models.DateTimeField()
     end_at = models.DateTimeField()
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
-    auto_renew = models.BooleanField(default=False)
     canceled_at = models.DateTimeField(null=True, blank=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
@@ -40,7 +30,7 @@ class Subscription(models.Model):
     @property
     def is_active_now(self):
         now = timezone.now()
-        return self.status == 'active' and self.start_at <= now <= self.end_at
+        return (self.canceled_at is None) and (self.start_at <= now <= self.end_at)
 
     def __str__(self):
-        return f'{self.user} - {self.plan} - {self.status}'
+        return f'{self.user} [{self.start_at:%Y-%m-%d} → {self.end_at:%Y-%m-%d}]'
