@@ -25,4 +25,5 @@ urlpatterns = [
     path('api/v1/auth/login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/v1/auth/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/v1/accounts/', include('accounts.urls')),
+    path('api/v1/videos/', include('videos.urls')),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
