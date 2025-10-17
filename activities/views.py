@@ -56,7 +56,7 @@ class CommentViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        qs = Comment.objects.filter(user=self.request.user).order_by("created_at")
+        qs = Comment.objects.filter(user=self.request.user).order_by("-created_at")
         video_id = self.request.query_params.get("video")
         if video_id:
             qs = qs.filter(video_id=video_id)
